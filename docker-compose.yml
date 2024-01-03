@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  # MySQL service
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: employee_management_system
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3307:3306"
+    networks:
+      - mern-app
+
+  # Express.js (Node.js) server service
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8090:8090"
+    depends_on:
+      - mysql
+    networks:
+      - mern-app
+
+  # React (Node.js) client service
+  frontendspring-master:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: frontendspring-master
+    ports:
+      - "3000:3000"
+    networks:
+      - mern-app
+
+networks:
+  mern-app:
+    driver: bridge
